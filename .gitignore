@@ -141,7 +141,6 @@ dmypy.json
 mongo-volume/
 redis-volume
 mongo-init.js
-*.txt
 *.csv
 *.http
 *.sql
