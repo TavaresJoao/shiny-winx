@@ -4,6 +4,8 @@ from dotenv import load_dotenv
 from fastapi import Depends, FastAPI
 from fastapi.openapi.utils import get_openapi
 
+from .routers import endpoints
+
 load_dotenv()
 
 api = FastAPI()
@@ -15,7 +17,7 @@ def custom_openapi():
     openapi_schema = get_openapi(
         title="Stella - API",
         version="1.0_beta",
-        description="Serviço para Gerenciamento da Base de Exames",
+        description="Serviço para Gerenciamento da Bdocker-compase de Exames",
         routes=api.routes
     )
     api.openapi_schema = openapi_schema
