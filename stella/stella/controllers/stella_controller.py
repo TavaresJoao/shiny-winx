@@ -44,3 +44,13 @@ def insert_one_exam(exam_data) -> bool:
     exams_collection.insert_one(to_add)
 
     return True
+
+def login_medic(login_data) -> dict:
+    doctors_collection = get_mongo_connection("Doctors")
+    login_query = {"username": login_data.username, "password": login_data.password}
+    tentalogin = doctors_collection.find(login_query)
+    try:
+        return [{'name': x['name'], 'CRM': x['crm'], 'token': 'abc'} for x in tentalogin]
+    except Exception as e:
+        return None
+    
