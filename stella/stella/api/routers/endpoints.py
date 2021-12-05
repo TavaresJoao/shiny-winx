@@ -38,6 +38,7 @@ async def test():
             headers={"WWW-Authenticate": "Bearer"}
         )
 
+# EXAMS
 @router.get("/api/stella/exams/list", tags=["stella"])
 async def list_exams():
     try:
@@ -74,6 +75,7 @@ async def insert_exam(exam_data: Exam):
             headers={"WWW-Authenticate": "Bearer"}
         )
 
+# LOGIN
 @router.post("/api/stella/login", tags=["stella"])
 async def system_login(login_data : LoginDoctor):
     try:
@@ -84,5 +86,32 @@ async def system_login(login_data : LoginDoctor):
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Ocorreu um erro interno, tente novamente mais tarde",
+            headers={"WWW-Authenticate": "Bearer"}
+        )
+
+# PATIANTS
+@router.get("/api/stella/patiants/list", tags=["stella"])
+async def list_patiants():
+    try:
+        patiants_list = get_list_patiants()
+        print('{}'.format(patiants_list))
+        return {'patiants' : patiants_list}
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Ocorreu um erro interno, tente novamente mais tarde",
+            headers={"WWW-Authenticate": "Bearer"}
+        )
+
+@router.get("/api/stella/patiants", tags=["stella"])
+async def get_patiant_by_user_name(username: str):
+    try:
+        patiant = get_patiant_by_username(username)
+        assert patiant is not None
+        return patiant
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="{}".format(e),
             headers={"WWW-Authenticate": "Bearer"}
         )

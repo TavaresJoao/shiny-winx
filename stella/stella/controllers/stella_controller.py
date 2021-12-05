@@ -66,14 +66,14 @@ def login_medic(login_data) -> dict:
 def get_list_patiants_by_query(query: dict) -> list:
     patiants_collection = get_mongo_connection("patiants")
     returned_data = patiants_collection.find(query)
-    patiants_list = [x for x in returned_data]
+    patiants_list = [{'_id': str(x['_id']), 'username': x['username'], 'name': x['name']} for x in returned_data]
     return patiants_list
 
 def get_list_patiants() -> list:
     return get_list_patiants_by_query({})
 
-def get_patiant_by_username(username: str):
+def get_patiant_by_username(username: str) -> dict:
     patiants_list = get_list_patiants_by_query({'username': username})
     if len(patiants_list) == 0:
         return None
-    return patiants_list[0]
+    return patiants_list
