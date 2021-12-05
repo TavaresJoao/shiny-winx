@@ -2,6 +2,8 @@ import json
 import os
 from pathlib import Path
 from urllib import parse
+from datetime import datetime
+import dateutil.parser
 
 import pandas as pd
 from pymongo import collection, MongoClient
@@ -22,5 +24,23 @@ def get_mongo_connection(collection_name: str) -> collection.Collection:
 def get_list_of_exams() -> list:
     exams_collection = get_mongo_connection("exams")
     returned_data = exams_collection.find({})
-    exam_list = [{'data_series': x['data_series'], 'meta_fields': x['meta_fields']} for x in returned_data]
+    exam_list = [{'date_series': x['date_series'], 'meta_fields': x['meta_fields']} for x in returned_data]
     return exam_list
+
+def insert_one_exam(exam_data) -> bool:
+    to_add = dict()
+    to_add['date_series'] = dict()
+    to_add['date_series']['dt'] = list()
+    to_add['date_series']['pt'] = list()
+    to_add['meta_fields'] = exam_data.meta_fields
+
+    assert len(exam_data.date_series['dt']) == len(exam_data.date_series['pt'])
+
+    for dt, pt in zip(exam_data.date_series['dt'], exam_data.date_series['pt']):
+        to_add['date_series']['dt'].append(dateutil.parser.parse(dt))
+        to_add['date_series']['pt'].append(float(pt))
+
+    exams_collection = get_mongo_connection("exams")
+    exams_collection.insert_one(to_add)
+
+    return True
