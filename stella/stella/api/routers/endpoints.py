@@ -28,10 +28,22 @@ async def test():
             headers={"WWW-Authenticate": "Bearer"}
         )
 
-@router.get("/api/stella/exams", tags=["stella"])
+@router.get("/api/stella/exams/list", tags=["stella"])
 async def list_exams():
     try:
         exam_list = get_list_of_exams()
+        return {'exams' : exam_list}
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Ocorreu um erro interno, tente novamente mais tarde",
+            headers={"WWW-Authenticate": "Bearer"}
+        )
+
+@router.get("/api/stella/exams", tags=["stella"])
+async def list_exam_by_exam_name(exam_name: str):
+    try:
+        exam_list = get_list_of_exams_by_exam_name(exam_name)
         return {'exams' : exam_list}
     except Exception:
         raise HTTPException(
