@@ -11,7 +11,17 @@ class Exam(BaseModel):
     date_series: dict
     meta_fields: dict
 
-class Login(BaseModel):
+class Patiant(BaseModel):
+    name: str
+    username: str
+    password: str
+
+class Doctor(BaseModel):
+    name: str
+    username: str
+    password: str
+
+class LoginDoctor(BaseModel):
     username: str
     password: str
 
@@ -65,9 +75,8 @@ async def insert_exam(exam_data: Exam):
         )
 
 @router.post("/api/stella/login", tags=["stella"])
-async def system_login(login_data : Login):
+async def system_login(login_data : LoginDoctor):
     try:
-        print(login_data, flush=True)
         ret = login_medic(login_data)
         assert ret is not None
         return ret[0]
