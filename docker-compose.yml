@@ -40,3 +40,5 @@ services:
       - winx-network
     env_file:
       - stella/.env
+    volumes:
+      - ./stella/stella:/webapp/stella

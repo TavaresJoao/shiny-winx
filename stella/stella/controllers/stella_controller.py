@@ -52,8 +52,9 @@ def insert_one_exam(exam_data) -> bool:
 
     return True
 
+# DOCTORS ENDPOINTS
 def login_medic(login_data) -> dict:
-    doctors_collection = get_mongo_connection("Doctors")
+    doctors_collection = get_mongo_connection("doctors")
     login_query = {"username": login_data.username, "password": login_data.password}
     tentalogin = doctors_collection.find(login_query)
     try:
@@ -67,3 +68,12 @@ def get_list_patiants_by_query(query: dict) -> list:
     returned_data = patiants_collection.find(query)
     patiants_list = [x for x in returned_data]
     return patiants_list
+
+def get_list_patiants() -> list:
+    return get_list_patiants_by_query({})
+
+def get_patiant_by_username(username: str):
+    patiants_list = get_list_patiants_by_query({'username': username})
+    if len(patiants_list) == 0:
+        return None
+    return patiants_list[0]
