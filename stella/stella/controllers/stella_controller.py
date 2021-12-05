@@ -21,11 +21,18 @@ def get_mongo_connection(collection_name: str) -> collection.Collection:
     mongo_client = MongoClient(conn_string)
     return mongo_client[db_name][collection_name]
 
-def get_list_of_exams() -> list:
+# EXAM ENDPOINS
+def get_list_exams_by_query(query: dict) -> list:
     exams_collection = get_mongo_connection("exams")
-    returned_data = exams_collection.find({})
+    returned_data = exams_collection.find(query)
     exam_list = [{'date_series': x['date_series'], 'meta_fields': x['meta_fields']} for x in returned_data]
     return exam_list
+
+def get_list_of_exams() -> list:
+    return get_list_exams_by_query({})
+
+def get_list_of_exams_by_exam_name(exam_name: str) -> list:
+    return get_list_exams_by_query({"meta_fields.exam_name": exam_name})
 
 def insert_one_exam(exam_data) -> bool:
     to_add = dict()
@@ -44,3 +51,10 @@ def insert_one_exam(exam_data) -> bool:
     exams_collection.insert_one(to_add)
 
     return True
+
+# PATIANT ENDPOINTS
+def get_list_patiants_by_query(query: dict) -> list:
+    patiants_collection = get_mongo_connection("patiants")
+    returned_data = patiants_collection.find(query)
+    patiants_list = [x for x in returned_data]
+    return patiants_list
